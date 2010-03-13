@@ -1,0 +1,84 @@
+-*- outline -*-
+
+Exec daemon wire protocol.
+
+* Types:
+ - INT32: int_32_t(network order)
+   Uses: fd_t, error_t, sig_t
+ - UINT32: uint_32_t(network order)
+   Uses: pid_t, gid_t
+ - UINT64: uint_64_t(network order)
+   Uses: rp_cookie_t
+ - BOOLEAN: uint_32_t
+ - STRING: UINT32 length, uint_8_t[]
+ - ARRAY[STRING]: UINT32 length(members not octets), members
+
+
+Module BASE, version 0.
+
+* Requests:
+
+** PREPARE: Required
+  - CWD: STRING
+  - PROGRAM: STRING
+  - ARGS: ARRAY[STRING]
+  - ENVIRONMENT: ARRAY[STRING]
+    List of environment variables(of the form NAME=VALUE)
+  - PATH: ARRAY[STRING]
+    List of directories
+  - SEARCH: BOOLEAN
+    If non-NIL and PROGRAM doesn't contain a slash, search PROGRAM in PATH
+
+** CURRENT-CREDENTIALS(UDP): Required
+   Uses SCM_CREDENTIALS
+  - COOKIE: UINT64(rp_cookie_t)
+  - UID: UINT32(uid_t)
+  - GID: UINT32(gid_t)
+
+** SET-CREDENTIALS:
+  - UID: UINT32(uid_t)
+  - GID: UINT32(gid_t)
+
+** SET-PROCESS-GROUP
+  - PGROUP: INT32(gid_t)
+
+** START-PROCESS-SESSION
+
+** INHERIT-FD(UDP)
+   Uses SCM_RIGHTS
+  - COOKIE: UINT64(rp_cookie_t)
+  - FD: INT32(fd_t)
+
+** DUPLICATE-FD
+  - FD: INT32(fd_t)
+  - NEWFD: INT32(fd_t)
+
+** CHANGE-ROOT
+  - ROOT: STRING
+
+** EXECUTE:
+
+** KILL:
+  - SIGNAL: INT32(sig_t)
+
+* Replies
+
+** CAPABILITIES
+  - CAPS: ARRAY[STRING]
+    List of <Module>=<Version>
+
+** HAVE-COOKIE
+  - COOKIE: UINT64(rp_cookie_t)
+
+** PROCESS_STARTED:
+  - PID: INT32(pid_t)
+
+** ERROR:
+  - ACTION: STRING
+  - ERROR: INT32(error_t)
+  - MESSAGE: STRING
+
+** PROCESS_END:
+  - END-TYPE: EXIT|KILL
+  - END-CODE: if END-TYPE is EXIT then exit-code, otherwise
+              signal number that killed it
