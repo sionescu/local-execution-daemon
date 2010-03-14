@@ -31,6 +31,12 @@ AC_PROG_CC
 # required versions of other packages
 m4_define([glib_required_version], [2.22.0])
 
+dnl Checks for header files.
+AC_CHECK_HEADER_STRICT(stdlib.h)
+AC_CHECK_HEADER_STRICT(string.h)
+AC_CHECK_HEADER_STRICT(unistd.h)
+AC_CHECK_HEADER_STRICT(sys/socket.h)
+
 PKG_CHECK_MODULES(GLIB,
   [glib-2.0 >= glib_required_version])
 

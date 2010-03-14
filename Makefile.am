@@ -1,3 +1,5 @@
+ACLOCAL_AMFLAGS = -I m4
+
 AM_CFLAGS = -std=c99 -Wall -Wstrict-prototypes
 
 bin_PROGRAMS = src/server/local-execution-daemon
