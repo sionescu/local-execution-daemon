@@ -59,7 +59,7 @@ lx_write(gint fd, gpointer buf, gsize len)
     }
 }
 
-int
+gint
 lx_write_full(gint fd, gpointer buf, gsize len)
 {
     gint octets_written = 0;
@@ -83,7 +83,7 @@ lx_read_stream_into_buffer(int fd, RxBuffer *buf, GError **error)
 
     gint32 total_length;
     gsize datalen = sizeof(gint32);
-    int noctets = lx_read_full(fd, &total_length, datalen);
+    gint noctets = lx_read_full(fd, &total_length, datalen);
 
     if (noctets < 0) {
         LX_ERROR_SYSCALL(error);
@@ -99,8 +99,8 @@ lx_read_stream_into_buffer(int fd, RxBuffer *buf, GError **error)
     g_byte_array_set_size(buf->array, total_length);
     lx_read_full(fd, buf->array->data, total_length);
     g_printf(" values:%d,%d,%d,%d",
-             (int)buf->array->data[0], (int)buf->array->data[1],
-             (int)buf->array->data[2], (int)buf->array->data[3]);
+             (gint)buf->array->data[0], (gint)buf->array->data[1],
+             (gint)buf->array->data[2], (gint)buf->array->data[3]);
 
     return buf;
 }

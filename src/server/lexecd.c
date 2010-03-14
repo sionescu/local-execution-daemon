@@ -22,7 +22,7 @@ void print_str(gpointer str, gpointer user_data)
 int main(int argc, char *argv[])
 {
     g_printf("Socket: create");
-    int server_socket = socket(PF_UNIX, SOCK_STREAM, 0);
+    gint server_socket = socket(PF_UNIX, SOCK_STREAM, 0);
 
     struct sockaddr_un server_address = { AF_UNIX, "\0init_console" };
     g_printf(" bind");
@@ -35,9 +35,9 @@ int main(int argc, char *argv[])
     struct sockaddr_un client_address;
     socklen_t client_address_length = sizeof client_address;
     g_printf(" accept");
-    int client_connection = accept(server_socket,
-                                   (struct sockaddr *) &client_address,
-                                   &client_address_length);
+    gint client_connection = accept(server_socket,
+                                    (struct sockaddr *) &client_address,
+                                    &client_address_length);
     g_printf(" close");
     close(server_socket);
 
