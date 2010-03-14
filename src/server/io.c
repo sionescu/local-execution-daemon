@@ -82,13 +82,14 @@ lx_read_stream_into_buffer(int fd, RxBuffer *buf, GError **error)
     g_assert(buf != NULL); g_assert(error != NULL);
 
     gint32 total_length;
-    int noctets = lx_read_full(fd, &total_length, sizeof(gint32));
+    gsize datalen = sizeof(gint32);
+    int noctets = lx_read_full(fd, &total_length, datalen);
 
     if (noctets < 0) {
         LX_ERROR_SYSCALL(error);
         return NULL;
-    } else if (noctets < 4) {
-        LX_ERROR_MESSAGE_EOF(error, 4, noctets);
+    } else if (noctets < datalen) {
+        LX_ERROR_MESSAGE_EOF(error, datalen, noctets);
         return NULL;
     } else {
         total_length = GINT32_FROM_BE(total_length);
