@@ -6,6 +6,12 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
+#include <glib.h>
+#include <glib/gprintf.h>
+
+#include "io.h"
+#include "reader.h"
+#include "printer.h"
 #include "lexecd.h"
 
 void print_str(gpointer str, gpointer user_data)
